@@ -40,4 +40,10 @@ async function run() {
   }
 }
 
-run();
+// Export for testing
+module.exports = run;
+
+// Run the function if this script is the main module
+if (require.main === module) {
+  run();
+}
