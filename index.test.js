@@ -1,24 +1,49 @@
-const wait = require('./wait');
-const process = require('process');
-const cp = require('child_process');
-const path = require('path');
+const core = require('@actions/core');
+const exec = require('@actions/exec');
+const run = require('../src/index');
 
-test('throws invalid number', async () => {
-  await expect(wait('foo')).rejects.toThrow('milliseconds not a number');
+jest.mock('@actions/core');
+jest.mock('@actions/exec');
+
+describe('Setup pseudocode-summarizer', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it('Installs Python when install-python is true', async () => {
+    core.getInput.mockReturnValueOnce('true');
+
+    await run();
+
+    expect(exec.exec).toHaveBeenCalledWith('sudo apt-get update');
+    expect(exec.exec).toHaveBeenCalledWith('sudo apt-get install python3.11');
+  });
+
+  it('Does not install Python when install-python is false', async () => {
+    core.getInput.mockReturnValueOnce('false');
+
+    await run();
+
+    expect(exec.exec).not.toHaveBeenCalledWith('sudo apt-get update');
+    expect(exec.exec).not.toHaveBeenCalledWith('sudo apt-get install python3.11');
+  });
+
+  it('Checks Python version', async () => {
+    core.getInput.mockReturnValueOnce('false');
+    exec.exec.mockImplementationOnce((cmd, args, opts) => {
+      opts.listeners.stdout(Buffer.from('Python 3.9.0'));
+    });
+
+    await run();
+
+    expect(exec.exec).toHaveBeenCalledWith('python --version', [], expect.anything());
+  });
+
+  it('Installs pseudocode-summarizer', async () => {
+    core.getInput.mockReturnValueOnce('false');
+
+    await run();
+
+    expect(exec.exec).toHaveBeenCalledWith('pip install pseudocode-summarizer');
+  });
 });
-
-test('wait 500 ms', async () => {
-  const start = new Date();
-  await wait(500);
-  const end = new Date();
-  var delta = Math.abs(end - start);
-  expect(delta).toBeGreaterThanOrEqual(500);
-});
-
-// shows how the runner will run a javascript action with env / stdout protocol
-test('test runs', () => {
-  process.env['INPUT_MILLISECONDS'] = 100;
-  const ip = path.join(__dirname, 'index.js');
-  const result = cp.execSync(`node ${ip}`, {env: process.env}).toString();
-  console.log(result);
-})
