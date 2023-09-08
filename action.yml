@@ -1,13 +1,10 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'Setup pseudocode-summarizer'
+description: 'Installs pseudocode-summarizer CLI tool'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
-    required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+  install-python:
+    description: 'Whether to install Python 3.11 first'
+    required: false
+    default: 'false'
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: 'node12'
+  main: 'src/index.js'
