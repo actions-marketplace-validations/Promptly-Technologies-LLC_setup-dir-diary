@@ -1,18 +1,40 @@
 const core = require('@actions/core');
-const wait = require('./wait');
+const exec = require('@actions/exec');
 
-
-// most @actions toolkit packages have async methods
 async function run() {
   try {
-    const ms = core.getInput('milliseconds');
-    core.info(`Waiting ${ms} milliseconds ...`);
+    const installPython = core.getInput('install-python') === 'true';
 
-    core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-    await wait(parseInt(ms));
-    core.info((new Date()).toTimeString());
+    if (installPython) {
+      // Install Python 3.11
+      await exec.exec('sudo apt-get update');
+      await exec.exec('sudo apt-get install python3.11');
+    }
 
-    core.setOutput('time', new Date().toTimeString());
+    // Check Python version
+    let versionOutput = '';
+    const options = {};
+    options.listeners = {
+      stdout: (data) => {
+        versionOutput += data.toString();
+      },
+    };
+    await exec.exec('python --version', [], options);
+
+    const versionMatch = versionOutput.match(/\d+\.\d+/);
+    if (versionMatch) {
+      const version = parseFloat(versionMatch[0]);
+      if (version < 3.8) {
+        core.setFailed(`Python version ${version} is less than 3.8.`);
+        return;
+      }
+    } else {
+      core.setFailed('Failed to determine Python version.');
+      return;
+    }
+
+    // Install pseudocode-summarizer
+    await exec.exec('pip install pseudocode-summarizer');
   } catch (error) {
     core.setFailed(error.message);
   }
