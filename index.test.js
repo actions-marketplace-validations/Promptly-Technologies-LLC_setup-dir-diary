@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const exec = require('@actions/exec');
-const run = require('../src/index');
+const run = require('./index');
 
 jest.mock('@actions/core');
 jest.mock('@actions/exec');
