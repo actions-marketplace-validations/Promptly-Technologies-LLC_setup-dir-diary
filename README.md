@@ -46,5 +46,5 @@ You can now consume the action by referencing the v1 branch
 ```yaml
 uses: actions/setup-pseudocode-summarizer@v1
 with:
-  install-python: true
+  install-python: 'true'
 ```
