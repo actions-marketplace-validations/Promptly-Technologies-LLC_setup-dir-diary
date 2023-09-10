@@ -6,6 +6,11 @@ jest.mock('@actions/core');
 jest.mock('@actions/exec');
 
 describe('Setup pseudocode-summarizer', () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
+  
+
   afterEach(() => {
     jest.resetAllMocks();
   });
