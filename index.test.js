@@ -46,8 +46,19 @@ describe('Setup pseudocode-summarizer', () => {
   it('Installs pseudocode-summarizer', async () => {
     core.getInput.mockReturnValueOnce('false');
 
+    exec.exec.mockImplementation((cmd, args, opts) => {
+      if (cmd === 'python --version') {
+        opts.listeners.stdout(Buffer.from('Python 3.9.0'));
+      }
+    });
+
     await run();
 
-    expect(exec.exec).toHaveBeenLastCalledWith('pip install pseudocode-summarizer');
+    // Check all calls to exec.exec and find if any match the expected command
+    const wasCalledWithExpectedCommand = exec.exec.mock.calls.some(
+      (call) => call[0] === 'pip install pseudocode-summarizer'
+    );
+
+  expect(wasCalledWithExpectedCommand).toBe(true);
   });
 });
