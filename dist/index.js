@@ -17,7 +17,7 @@ async function run() {
       await exec.exec('sudo apt-get install python3.11');
     }
 
-    // Check Python version
+    // Check Python version is greater than 3.8
     let versionOutput = '';
     const options = {};
     options.listeners = {
