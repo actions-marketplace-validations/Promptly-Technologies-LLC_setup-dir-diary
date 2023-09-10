@@ -1,6 +1,62 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 932:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const core = __nccwpck_require__(186);
+const exec = __nccwpck_require__(514);
+
+async function run() {
+  try {
+    const installPython = core.getInput('install-python') === 'true';
+
+    if (installPython) {
+      // Install Python 3.11
+      await exec.exec('sudo apt-get update');
+      await exec.exec('sudo apt-get install python3.11');
+    }
+
+    // Check Python version
+    let versionOutput = '';
+    const options = {};
+    options.listeners = {
+      stdout: (data) => {
+        versionOutput += data.toString();
+      },
+    };
+    await exec.exec('python --version', [], options);
+
+    const versionMatch = versionOutput.match(/\d+\.\d+/);
+    if (versionMatch) {
+      const version = parseFloat(versionMatch[0]);
+      if (version < 3.8) {
+        core.setFailed(`Python version ${version} is less than 3.8.`);
+        return;
+      }
+    } else {
+      core.setFailed('Failed to determine Python version.');
+      return;
+    }
+
+    // Install pseudocode-summarizer
+    await exec.exec('pip install pseudocode-summarizer');
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+}
+
+// Export for testing
+module.exports = run;
+
+// Run the function if this script is the main module
+if (require.main === require.cache[eval('__filename')]) {
+  run();
+}
+
+
+/***/ }),
+
 /***/ 351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -4069,56 +4125,13 @@ module.exports = require("util");
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
-const core = __nccwpck_require__(186);
-const exec = __nccwpck_require__(514);
-
-async function run() {
-  try {
-    const installPython = core.getInput('install-python') === 'true';
-
-    if (installPython) {
-      // Install Python 3.11
-      await exec.exec('sudo apt-get update');
-      await exec.exec('sudo apt-get install python3.11');
-    }
-
-    // Check Python version
-    let versionOutput = '';
-    const options = {};
-    options.listeners = {
-      stdout: (data) => {
-        versionOutput += data.toString();
-      },
-    };
-    await exec.exec('python --version', [], options);
-
-    const versionMatch = versionOutput.match(/\d+\.\d+/);
-    if (versionMatch) {
-      const version = parseFloat(versionMatch[0]);
-      if (version < 3.8) {
-        core.setFailed(`Python version ${version} is less than 3.8.`);
-        return;
-      }
-    } else {
-      core.setFailed('Failed to determine Python version.');
-      return;
-    }
-
-    // Install pseudocode-summarizer
-    await exec.exec('pip install pseudocode-summarizer');
-  } catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run();
-
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(932);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
