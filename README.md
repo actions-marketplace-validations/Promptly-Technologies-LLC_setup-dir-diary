@@ -18,6 +18,8 @@ with:
   install-python: 'true'
 ```
 
+Note that Python 3.8 or higher is required to install the pseudocode-summarizer tool. This action will handle pre-installation of Python 3.11 for you if you set the `install-python` option to `true`. If the option is set to `false`, you will need to install Python 3.8 or higher as a separate step before running this action.
+
 ## Contributing
 
 ### Development
