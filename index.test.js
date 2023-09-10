@@ -9,7 +9,6 @@ describe('Setup pseudocode-summarizer', () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
-  
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -49,6 +48,6 @@ describe('Setup pseudocode-summarizer', () => {
 
     await run();
 
-    expect(exec.exec).toHaveBeenCalledWith('pip install pseudocode-summarizer');
+    expect(exec.exec).toHaveBeenLastCalledWith('pip install pseudocode-summarizer');
   });
 });
