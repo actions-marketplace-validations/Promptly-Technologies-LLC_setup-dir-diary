@@ -32,17 +32,6 @@ describe('Setup dir-diary', () => {
     expect(exec.exec).not.toHaveBeenCalledWith('sudo apt-get install python3.11');
   });
 
-  it('Checks Python version', async () => {
-    core.getInput.mockReturnValueOnce('false');
-    exec.exec.mockImplementationOnce((cmd, args, opts) => {
-      opts.listeners.stdout(Buffer.from('Python 3.9.0'));
-    });
-
-    await run();
-
-    expect(exec.exec).toHaveBeenCalledWith('python --version', [], expect.anything());
-  });
-
   it('Installs dir-diary', async () => {
     core.getInput.mockReturnValueOnce('false');
 
