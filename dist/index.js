@@ -17,28 +17,6 @@ async function run() {
       await exec.exec('sudo apt-get install python3.11');
     }
 
-    // Check Python version is greater than 3.8
-    let versionOutput = '';
-    const options = {};
-    options.listeners = {
-      stdout: (data) => {
-        versionOutput += data.toString();
-      },
-    };
-    await exec.exec('python --version', [], options);
-
-    const versionMatch = versionOutput.match(/\d+\.\d+/);
-    if (versionMatch) {
-      const version = parseFloat(versionMatch[0]);
-      if (version < 3.8) {
-        core.setFailed(`Python version ${version} is less than 3.8.`);
-        return;
-      }
-    } else {
-      core.setFailed('Failed to determine Python version.');
-      return;
-    }
-
     // Install dir-diary
     await exec.exec('pip install dir-diary');
   } catch (error) {
