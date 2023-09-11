@@ -1,5 +1,5 @@
-name: 'Setup pseudocode-summarizer'
-description: 'Installs pseudocode-summarizer CLI tool'
+name: 'Setup dir-diary'
+description: 'Installs dir-diary CLI tool'
 inputs:
   install-python:
     description: 'Whether to install Python 3.11 first'
