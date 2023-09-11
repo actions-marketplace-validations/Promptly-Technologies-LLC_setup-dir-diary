@@ -5,7 +5,7 @@ const run = require('./index');
 jest.mock('@actions/core');
 jest.mock('@actions/exec');
 
-describe('Setup pseudocode-summarizer', () => {
+describe('Setup dir-diary', () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
@@ -43,7 +43,7 @@ describe('Setup pseudocode-summarizer', () => {
     expect(exec.exec).toHaveBeenCalledWith('python --version', [], expect.anything());
   });
 
-  it('Installs pseudocode-summarizer', async () => {
+  it('Installs dir-diary', async () => {
     core.getInput.mockReturnValueOnce('false');
 
     exec.exec.mockImplementation((cmd, args, opts) => {
@@ -56,7 +56,7 @@ describe('Setup pseudocode-summarizer', () => {
 
     // Check all calls to exec.exec and find if any match the expected command
     const wasCalledWithExpectedCommand = exec.exec.mock.calls.some(
-      (call) => call[0] === 'pip install pseudocode-summarizer'
+      (call) => call[0] === 'pip install dir-diary'
     );
 
   expect(wasCalledWithExpectedCommand).toBe(true);

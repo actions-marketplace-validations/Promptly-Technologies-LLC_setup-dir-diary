@@ -39,8 +39,8 @@ async function run() {
       return;
     }
 
-    // Install pseudocode-summarizer
-    await exec.exec('pip install pseudocode-summarizer');
+    // Install dir-diary
+    await exec.exec('pip install dir-diary');
   } catch (error) {
     core.setFailed(error.message);
   }
