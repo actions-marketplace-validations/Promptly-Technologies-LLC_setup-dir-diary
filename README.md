@@ -1,7 +1,7 @@
 # setup-dir-diary
 
 <p align="center">
-  <a href="https://github.com/actions/javascript-action/actions"><img alt="javscript-action status" src="https://github.com/actions/javascript-action/workflows/units-test/badge.svg"></a>
+  <a href="https://github.com/Promptly-Technologies-LLC/dir-diary"><img alt="dir-diary status" src="https://github.com/Promptly-Technologies-LLC/dir-diary/workflows/units-test/badge.svg"></a>
 </p>
 
 This Github Action installs the [dir-diary CLI tool](https://github.com/Promptly-Technologies-LLC/dir-diary), which queries OpenAI's GPT-3.5-Turbo Large Language Model (LLM) for the purpose of generating a comprehensive pseudocode summary of the code in your project folder. A comprehensive pseudocode summary makes your project easier to grasp at a glance, and can also be embedded in a vector database or dumped into context when working with an LLM. 
