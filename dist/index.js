@@ -24,7 +24,7 @@ async function run() {
   }
 }
 
-// Export for testing
+// Export `run` for testing
 module.exports = run;
 
 // Run the function if this script is the main module
@@ -592,7 +592,7 @@ class OidcClient {
                 .catch(error => {
                 throw new Error(`Failed to get ID Token. \n 
         Error Code : ${error.statusCode}\n 
-        Error Message: ${error.result.message}`);
+        Error Message: ${error.message}`);
             });
             const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
             if (!id_token) {
