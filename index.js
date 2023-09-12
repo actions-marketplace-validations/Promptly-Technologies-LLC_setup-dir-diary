@@ -18,7 +18,7 @@ async function run() {
   }
 }
 
-// Export for testing
+// Export `run` for testing
 module.exports = run;
 
 // Run the function if this script is the main module
