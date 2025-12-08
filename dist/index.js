@@ -8,19 +8,44 @@ const core = __nccwpck_require__(186);
 const exec = __nccwpck_require__(514);
 
 async function run() {
-  try {
-    const installPython = core.getInput('install-python') === 'true';
+  let installPython = false;
+  let isWindows = false;
+  let pythonExists = false;
 
-    if (installPython) {
-      // Install Python 3.11
-      await exec.exec('sudo apt-get update');
-      await exec.exec('sudo apt-get install python3.11');
+  try {
+    installPython = core.getInput('install-python') === 'true';
+    isWindows = process.platform === 'win32';
+
+    // Check if Python 3.11 is already installed
+    try {
+      await exec.exec('python3.11 --version');
+      pythonExists = true;
+    } catch (error) {
+      pythonExists = false;
+    }
+
+    if (installPython && !pythonExists) {
+      if (isWindows) {
+        // Mimic actions/setup-python for Windows
+        await exec.exec('pwsh -Command "Invoke-WebRequest -Uri \'https://www.python.org/ftp/python/3.11.0/python-3.11.0-amd64.exe\' -OutFile \'python-installer.exe\'"', [], { shell: '/bin/bash' });
+        await exec.exec('pwsh -Command "Start-Process -FilePath \'python-installer.exe\' -ArgumentList \'/quiet InstallAllUsers=1 PrependPath=1\' -Wait"', [], { shell: '/bin/bash' });
+      } else {
+        // Mimic actions/setup-python for Ubuntu
+        await exec.exec('sudo apt-get update');
+        await exec.exec('sudo apt-get install python3.11');
+      }
     }
 
     // Install dir-diary
-    await exec.exec('pip install dir-diary');
+    const pipCommand = isWindows ? 'pip' : 'pip3';
+    await exec.exec(`${pipCommand} install dir-diary`);
   } catch (error) {
     core.setFailed(error.message);
+  } finally {
+    if (isWindows && installPython && !pythonExists) {
+      // Remove python-installer.exe if it exists
+      await exec.exec('pwsh -Command "if (Test-Path \'python-installer.exe\') { Remove-Item -Path \'python-installer.exe\' }"', [], { shell: '/bin/bash' });
+    }
   }
 }
 
